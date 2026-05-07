@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.OrderingCompleteMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.OrderingComplete">
+        <id column="id" property="id"/>
+        <result column="insert_time" property="insertTime"/>
+        <result column="reserve_no" property="reserveNo"/>
+        <result column="total_price" property="totalPrice"/>
+        <association property="customer" column="customer_id"
+                     select="com.farm.repository.CustomerMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="findByTime" resultMap="BaseResultMap">
+        SELECT * FROM ordering_complete
+        WHERE insert_time &gt;= #{startTime} AND insert_time &lt; #{endTime}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM ordering_complete WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ordering_complete (insert_time, reserve_no, total_price, customer_id)
+        VALUES (#{insertTime}, #{reserveNo}, #{totalPrice}, #{customer.id})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE ordering_complete SET insert_time = #{insertTime},
+               reserve_no = #{reserveNo}, total_price = #{totalPrice}, customer_id = #{customer.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM ordering_complete WHERE id = #{id}
+    </delete>
+
+</mapper>

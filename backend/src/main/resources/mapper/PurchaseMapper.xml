@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.PurchaseMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.Purchase">
+        <id column="id" property="id"/>
+        <result column="insert_time" property="insertTime"/>
+        <result column="amount" property="amount"/>
+        <result column="price" property="price"/>
+        <association column="product_id" property="product"
+                     javaType="com.farm.entity.Product"
+                     select="com.farm.repository.ProductMapper.selectByPrimaryKey"/>
+        <association column="fertilizer_id" property="fertilizer"
+                     javaType="com.farm.entity.Fertilizer"
+                     select="com.farm.repository.FertilizerMapper.selectByPrimaryKey"/>
+        <association column="restaurant_material_id" property="restaurantMaterial"
+                     javaType="com.farm.entity.RestaurantMaterial"
+                     select="com.farm.repository.RestaurantMaterialMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="findByTime" resultMap="BaseResultMap">
+        SELECT * FROM purchase
+        WHERE insert_time &gt;= #{startTime} AND insert_time &lt;= #{endTime}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO purchase (insert_time, amount, price, product_id, fertilizer_id, restaurant_material_id)
+        VALUES (#{insertTime}, #{amount}, #{price}, #{product.id}, #{fertilizer.id}, #{restaurantMaterial.id})
+    </insert>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.FertilizerMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.Fertilizer">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="amount" property="amount"/>
+        <result column="safe_amount" property="safeAmount"/>
+        <result column="unit" property="unit"/>
+        <result column="fertilizer_type" property="fertilizerType"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM fertilizer
+    </select>
+
+    <select id="findByFertilizerType" resultMap="BaseResultMap">
+        SELECT * FROM fertilizer WHERE fertilizer_type = #{fertilizerType}
+    </select>
+
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT * FROM fertilizer WHERE name = #{name}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM fertilizer WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fertilizer (name, amount, safe_amount, unit, fertilizer_type)
+        VALUES (#{name}, #{amount}, #{safeAmount}, #{unit}, #{fertilizerType})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE fertilizer SET name = #{name}, amount = #{amount},
+            safe_amount = #{safeAmount}, unit = #{unit}, fertilizer_type = #{fertilizerType}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM fertilizer WHERE id = #{id}
+    </delete>
+
+</mapper>

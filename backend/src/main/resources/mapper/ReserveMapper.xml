@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.ReserveMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.Reserve">
+        <id column="id" property="id"/>
+        <result column="no" property="no"/>
+        <result column="insert_time" property="insertTime"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <association property="customer" column="customer_id"
+                     select="com.farm.repository.CustomerMapper.selectByPrimaryKey"/>
+        <association property="diningTable" column="dining_table_id"
+                     select="com.farm.repository.DiningTableMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="findByCustomerUsername" resultMap="BaseResultMap">
+        SELECT r.* FROM reserve r
+        WHERE r.customer_id = (SELECT c.id FROM customer c WHERE c.username = #{username})
+    </select>
+
+    <select id="findByNo" resultMap="BaseResultMap">
+        SELECT * FROM reserve WHERE no = #{no}
+    </select>
+
+    <select id="findDiningTableByTime" resultType="com.farm.entity.DiningTable">
+        SELECT DISTINCT dt.* FROM dining_table dt
+        JOIN reserve r ON r.dining_table_id = dt.id
+        WHERE (r.start_time &lt;= #{startTime} AND r.end_time &gt; #{startTime})
+           OR (r.start_time &lt; #{endTime} AND r.end_time &gt;= #{endTime})
+           OR (r.start_time &gt;= #{startTime} AND r.end_time &lt;= #{endTime})
+    </select>
+
+    <select id="getCount" resultType="int">
+        SELECT COUNT(*) FROM reserve
+    </select>
+
+    <select id="getMaxNo" resultType="int">
+        SELECT MAX(CAST(no AS SIGNED)) FROM reserve
+    </select>
+
+    <select id="findAllOverdueReserve" resultMap="BaseResultMap">
+        SELECT * FROM reserve WHERE end_time &lt;= #{nowTime}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM reserve
+    </select>
+
+    <select id="findAllCustomerNotNull" resultMap="BaseResultMap">
+        SELECT * FROM reserve WHERE customer_id IS NOT NULL
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM reserve WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO reserve (no, insert_time, start_time, end_time, customer_id, dining_table_id)
+        VALUES (#{no}, #{insertTime}, #{startTime}, #{endTime},
+                #{customer.id}, #{diningTable.id})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE reserve SET no = #{no}, insert_time = #{insertTime},
+               start_time = #{startTime}, end_time = #{endTime},
+               customer_id = #{customer.id}, dining_table_id = #{diningTable.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM reserve WHERE id = #{id}
+    </delete>
+
+</mapper>

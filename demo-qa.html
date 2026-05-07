@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - 农场直供</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; color: #333; }
+        .header { background: #2d5016; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 24px; }
+        .nav a { color: white; text-decoration: none; margin-left: 20px; }
+        .hero { background: linear-gradient(135deg, #4a7c23, #6db33f); color: white; padding: 60px 24px; text-align: center; }
+        .hero h2 { font-size: 36px; margin-bottom: 16px; }
+        .hero p { font-size: 18px; opacity: 0.9; }
+        .products { padding: 40px 24px; max-width: 1200px; margin: 0 auto; }
+        .products h2 { text-align: center; margin-bottom: 30px; font-size: 28px; }
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .product-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; text-align: center; }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
+        .product-card h3 { margin: 12px 0 8px; }
+        .product-card .price { color: #d32f2f; font-size: 20px; font-weight: bold; }
+        .product-card button { background: #4a7c23; color: white; border: none; padding: 10px 24px; border-radius: 4px; cursor: pointer; margin-top: 12px; }
+        .product-card button:hover { background: #3a6218; }
+        .cart { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); padding: 24px; transition: right 0.3s; z-index: 100; }
+        .cart.open { right: 0; }
+        .cart h2 { margin-bottom: 20px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .cart-total { font-size: 20px; font-weight: bold; margin-top: 20px; text-align: right; }
+        .checkout-btn { background: #d32f2f; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-size: 16px; margin-top: 16px; cursor: pointer; }
+        .footer { background: #1a1a1a; color: #999; padding: 40px 24px; margin-top: 60px; }
+        .footer-links { display: flex; justify-content: space-around; margin-bottom: 30px; }
+        .footer-links a { color: #ccc; text-decoration: none; }
+        .newsletter { background: #f5f5f5; padding: 40px 24px; text-align: center; }
+        .newsletter input { padding: 12px; width: 300px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; }
+        .newsletter button { padding: 12px 24px; background: #4a7c23; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 99; }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    <header class="header">
+        <h1>FreshMart</h1>
+        <nav class="nav">
+            <a href="#home">首页</a>
+            <a href="#products">产品</a>
+            <a href="#about">关于</a>
+            <a href="javascript:void(0)" onclick="toggleCart()">购物车 (<span id="cart-count">0</span>)</a>
+        </nav>
+    </header>
+    <section class="hero" id="home">
+        <h2>从农场到餐桌</h2>
+        <p>新鲜有机蔬果，24小时从田间送达</p>
+    </section>
+    <section class="products" id="products">
+        <h2>当季精选</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="/images/tomato.jpg" alt="有机番茄">
+                <h3>有机番茄</h3>
+                <p class="price">¥12.8/斤</p>
+                <button onclick="addToCart('有机番茄', 12.8)">加入购物车</button>
+            </div>
+            <div class="product-card">
+                <img src="/images/cucumber.jpg" alt="黄瓜">
+                <h3>有机黄瓜</h3>
+                <p class="price">¥8.5/斤</p>
+                <button onclick="addToCart('有机黄瓜', 8.5)">加入购物车</button>
+            </div>
+            <div class="product-card">
+                <img src="/images/strawberry.jpg" alt="草莓">
+                <h3>丹东草莓</h3>
+                <p class="price">¥35.0/盒</p>
+                <button onclick="addToCart('丹东草莓', 35.0)">加入购物车</button>
+            </div>
+            <div class="product-card">
+                <img src="/images/rice.jpg" alt="五常大米">
+                <h3>五常大米</h3>
+                <p class="price">¥68.0/10斤</p>
+                <button onclick="addToCart('五常大米', 68.0)">加入购物车</button>
+            </div>
+            <div class="product-card">
+                <img src="/images/eggs.jpg" alt="土鸡蛋">
+                <h3>散养土鸡蛋</h3>
+                <p class="price">¥28.0/盒(30枚)</p>
+                <button onclick="addToCart('散养土鸡蛋', 28.0)">加入购物车</button>
+            </div>
+            <div class="product-card">
+                <img src="/images/honey.jpg" alt="蜂蜜">
+                <h3>野生蜂蜜</h3>
+                <p class="price">¥128.0/瓶</p>
+                <button onclick="addToCart('野生蜂蜜', 128.0)">加入购物车</button>
+            </div>
+        </div>
+    </section>
+    <section class="newsletter">
+        <h2>订阅我们的新鲜资讯</h2>
+        <p style="margin: 12px 0 20px;">每周获取当季蔬果推荐和优惠信息</p>
+        <input type="email" id="email-input" placeholder="输入您的邮箱">
+        <button onclick="subscribe()">订阅</button>
+        <p id="subscribe-msg" style="margin-top: 12px; color: green;"></p>
+    </section>
+    <footer class="footer" id="about">
+        <div class="footer-links">
+            <a href="/about">关于我们</a>
+            <a href="/contact">联系方式</a>
+            <a href="/faq">常见问题</a>
+            <a href="/terms">服务条款</a>
+            <a href="/privacy">隐私政策</a>
+        </div>
+        <p style="text-align: center;">&copy; 2026 FreshMart. All rights reserved.</p>
+    </footer>
+    <div class="cart" id="cart">
+        <h2>购物车</h2>
+        <div id="cart-items"></div>
+        <div class="cart-total">合计: ¥<span id="cart-total">0.00</span></div>
+        <button class="checkout-btn" onclick="checkout()">去结算</button>
+    </div>
+    <script>
+        var cartItems = [];
+        function addToCart(name, price) {
+            cartItems.push({ name: name, price: price });
+            updateCart();
+        }
+        function updateCart() {
+            document.getElementById('cart-count').textContent = cartItems.length;
+            var itemsHtml = '';
+            var total = 0;
+            for (var i = 0; i < cartItems.length; i++) {
+                itemsHtml += '<div class="cart-item"><span>' + cartItems[i].name + '</span><span>¥' + cartItems[i].price.toFixed(2) + '</span></div>';
+                total += cartItems[i].price;
+            }
+            document.getElementById('cart-items').innerHTML = itemsHtml;
+            document.getElementById('cart-total').textContent = total.toFixed(2);
+        }
+        function toggleCart() {
+            var cart = document.getElementById('cart');
+            var overlay = document.getElementById('overlay');
+            cart.classList.toggle('open');
+            overlay.style.display = cart.classList.contains('open') ? 'block' : 'none';
+        }
+        function checkout() {
+            if (cartItems.length === 0) {
+                alert('购物车是空的！');
+                return;
+            }
+            fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: cartItems })
+            }).then(function(res) {
+                return res.json();
+            }).then(function(data) {
+                alert('下单成功！');
+            });
+        }
+        function subscribe() {
+            var email = document.getElementById('email-input').value;
+            fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            }).then(function(res) {
+                return res.json();
+            }).then(function(data) {
+                document.getElementById('subscribe-msg').textContent = '订阅成功！';
+            }).catch(function(err) {
+                console.error('Subscribe failed:', err);
+            });
+        }
+        console.log('Page loaded, user:', userName);
+    </script>
+</body>
+</html>

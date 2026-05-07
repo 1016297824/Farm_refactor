@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.SaleNoMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.SaleNo">
+        <id column="id" property="id"/>
+        <result column="no" property="no"/>
+        <result column="insert_time" property="insertTime"/>
+    </resultMap>
+
+    <select id="getCount" resultType="int">
+        SELECT COUNT(*) FROM sale_no
+    </select>
+
+    <select id="getMaxNO" resultType="int">
+        SELECT MAX(no) FROM sale_no
+    </select>
+
+    <select id="findByNo" resultMap="BaseResultMap">
+        SELECT * FROM sale_no WHERE no = #{no}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sale_no (no, insert_time)
+        VALUES (#{no}, #{insertTime})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM sale_no WHERE id = #{id}
+    </delete>
+
+</mapper>

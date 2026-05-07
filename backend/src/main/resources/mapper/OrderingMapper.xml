@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.OrderingMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.Ordering">
+        <id column="id" property="id"/>
+        <result column="count" property="count"/>
+        <association property="reserve" column="reserve_id"
+                     select="com.farm.repository.ReserveMapper.selectByPrimaryKey"/>
+        <association property="menu" column="menu_id"
+                     select="com.farm.repository.MenuMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="findByReserveNo" resultMap="BaseResultMap">
+        SELECT o.* FROM ordering o
+        JOIN reserve r ON o.reserve_id = r.id
+        WHERE r.no = #{no}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM ordering WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ordering (count, reserve_id, menu_id)
+        VALUES (#{count}, #{reserve.id}, #{menu.id})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE ordering SET count = #{count}, reserve_id = #{reserve.id}, menu_id = #{menu.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM ordering WHERE id = #{id}
+    </delete>
+
+</mapper>

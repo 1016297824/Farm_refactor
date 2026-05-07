@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.AttendanceMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.Attendance">
+        <id column="id" property="id"/>
+        <result column="insert_time" property="insertTime"/>
+        <result column="working_hours" property="workingHours"/>
+        <association column="staff_id" property="staff"
+                     javaType="com.farm.entity.Staff"
+                     select="com.farm.repository.StaffMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM attendance
+    </select>
+
+    <select id="findManagerByChooseTime" resultMap="BaseResultMap">
+        SELECT a.* FROM attendance a
+        JOIN staff s ON a.staff_id = s.id
+        JOIN position p ON s.position_id = p.id
+        WHERE a.insert_time &gt;= #{chooseDate1} AND a.insert_time &lt;= #{chooseDate2}
+          AND p.authority IN ('FarmManager', 'RestaurantManager')
+    </select>
+
+    <select id="findFarmStaffByChooseTime" resultMap="BaseResultMap">
+        SELECT a.* FROM attendance a
+        JOIN staff s ON a.staff_id = s.id
+        JOIN position p ON s.position_id = p.id
+        WHERE a.insert_time &gt;= #{chooseDate1} AND a.insert_time &lt;= #{chooseDate2}
+          AND p.authority = 'FarmStaff'
+    </select>
+
+    <select id="findRestaurantStaffByChooseTime" resultMap="BaseResultMap">
+        SELECT a.* FROM attendance a
+        JOIN staff s ON a.staff_id = s.id
+        JOIN position p ON s.position_id = p.id
+        WHERE a.insert_time &gt;= #{chooseDate1} AND a.insert_time &lt;= #{chooseDate2}
+          AND p.authority = 'RestaurantStaff'
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO attendance (insert_time, working_hours, staff_id)
+        VALUES (#{insertTime}, #{workingHours}, #{staff.id})
+    </insert>
+
+</mapper>

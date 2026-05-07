@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: farm-backend
+    restart: unless-stopped
+    ports:
+      - "39080:8080"
+    environment:
+      DATABASE_URL: jdbc:mysql://host.docker.internal:13306/farm?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true&characterEncoding=utf-8
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: 138992
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 512M
+
+volumes: {}

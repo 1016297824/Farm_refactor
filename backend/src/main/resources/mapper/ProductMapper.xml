@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.ProductMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.Product">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="unit" property="unit"/>
+        <result column="amount" property="amount"/>
+        <result column="safe_amount" property="safeAmount"/>
+        <result column="product_type" property="productType"/>
+        <result column="base_amount" property="baseAmount"/>
+        <result column="base_unit" property="baseUnit"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM product
+    </select>
+
+    <select id="findByProductType" resultMap="BaseResultMap">
+        SELECT * FROM product WHERE product_type = #{productType}
+    </select>
+
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT * FROM product WHERE name = #{name}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM product WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO product (name, unit, amount, safe_amount, product_type, base_amount, base_unit)
+        VALUES (#{name}, #{unit}, #{amount}, #{safeAmount}, #{productType}, #{baseAmount}, #{baseUnit})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE product SET name = #{name}, unit = #{unit}, amount = #{amount},
+            safe_amount = #{safeAmount}, product_type = #{productType},
+            base_amount = #{baseAmount}, base_unit = #{baseUnit}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM product WHERE id = #{id}
+    </delete>
+
+</mapper>

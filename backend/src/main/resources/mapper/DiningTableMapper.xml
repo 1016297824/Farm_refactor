@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.DiningTableMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.DiningTable">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="seat" property="seat"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM dining_table
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM dining_table WHERE id = #{id}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM dining_table WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dining_table (type, seat)
+        VALUES (#{type}, #{seat})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE dining_table SET type = #{type}, seat = #{seat}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM dining_table WHERE id = #{id}
+    </delete>
+
+</mapper>

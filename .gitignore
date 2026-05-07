@@ -1,0 +1,46 @@
+# 忽略文档文件
+25-张坤-西塘草舍农场管理系统的设计与实现.doc
+前后端分离部署.docx
+
+# 忽略IDE和编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 忽略构建文件
+node_modules/
+dist/
+build/
+
+# 忽略系统文件
+.DS_Store
+Thumbs.db
+
+# 忽略环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 忽略日志文件
+logs/
+*.log
+
+# 忽略临时文件
+temp/
+tmp/
+
+# 忽略压缩文件
+*.zip
+*.tar.gz
+*.rar
+
+# 忽略数据库文件
+*.db
+*.sqlite
+
+# 忽略IDE生成的文件
+.trae/
+.gstack/
+

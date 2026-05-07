@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.StaffMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.Staff">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="tel_number" property="telNumber"/>
+        <result column="email" property="email"/>
+        <result column="address" property="address"/>
+        <result column="id_card_no" property="idCardNo"/>
+        <association column="position_id" property="position"
+                     javaType="com.farm.entity.Position"
+                     select="com.farm.repository.PositionMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM staff
+    </select>
+
+    <select id="findByUsername" resultMap="BaseResultMap">
+        SELECT * FROM staff WHERE username = #{username}
+    </select>
+
+    <select id="findByPositionAuthorityIsNull" resultMap="BaseResultMap">
+        SELECT * FROM staff WHERE position_id IS NULL
+    </select>
+
+    <select id="findByPositionAuthorityManagerStaff" resultMap="BaseResultMap">
+        SELECT s.* FROM staff s
+        LEFT JOIN position p ON s.position_id = p.id
+        WHERE p.authority LIKE 'Farm%' OR p.authority LIKE 'Restaurant%'
+    </select>
+
+    <select id="getCount" resultType="int">
+        SELECT COUNT(*) FROM staff
+    </select>
+
+    <select id="getMaxNo" resultType="int">
+        SELECT MAX(CAST(username AS SIGNED)) FROM staff
+    </select>
+
+    <select id="findAllFarmStaff" resultMap="BaseResultMap">
+        SELECT s.* FROM staff s
+        LEFT JOIN position p ON s.position_id = p.id
+        WHERE p.authority = 'FarmStaff'
+    </select>
+
+    <select id="findAllRestaurantStaff" resultMap="BaseResultMap">
+        SELECT s.* FROM staff s
+        LEFT JOIN position p ON s.position_id = p.id
+        WHERE p.authority = 'RestaurantStaff'
+    </select>
+
+    <select id="findAllWorked" resultMap="BaseResultMap">
+        SELECT * FROM staff WHERE position_id IS NOT NULL
+    </select>
+
+    <select id="findAllManager" resultMap="BaseResultMap">
+        SELECT s.* FROM staff s
+        LEFT JOIN position p ON s.position_id = p.id
+        WHERE p.authority IN ('FarmManager', 'RestaurantManager')
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO staff (username, password, name, tel_number, email, address, id_card_no, position_id)
+        VALUES (#{username}, #{password}, #{name}, #{telNumber}, #{email}, #{address}, #{idCardNo}, #{position.id})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE staff SET username = #{username}, password = #{password}, name = #{name},
+            tel_number = #{telNumber}, email = #{email}, address = #{address},
+            id_card_no = #{idCardNo}, position_id = #{position.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM staff WHERE id = #{id}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM staff WHERE id = #{id}
+    </select>
+
+</mapper>

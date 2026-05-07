@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.repository.RestaurantMaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.farm.entity.RestaurantMaterial">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="amount" property="amount"/>
+        <result column="safe_amount" property="safeAmount"/>
+        <result column="unit" property="unit"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM restaurant_material
+    </select>
+
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT * FROM restaurant_material WHERE name = #{name}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM restaurant_material WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO restaurant_material (name, amount, safe_amount, unit)
+        VALUES (#{name}, #{amount}, #{safeAmount}, #{unit})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE restaurant_material SET name = #{name}, amount = #{amount},
+               safe_amount = #{safeAmount}, unit = #{unit}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM restaurant_material WHERE id = #{id}
+    </delete>
+
+</mapper>
