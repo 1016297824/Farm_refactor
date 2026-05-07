@@ -4,12 +4,12 @@
 
 ## 技术栈
 
-| 层 | 技术 |
-|---|------|
-| 后端 | Spring Boot 2.2.5 / MyBatis 2.1.3 / MySQL 8 / Java 11 |
-| 前端 | Vue 2 / Element UI / Axios / Bootstrap |
-| 部署 | Docker Compose / 腾讯云 CVM / EdgeOne Pages CDN |
-| AI 工具链 | Claude Code / Spec Kit / OpenSpec / gstack / ui-ux-pro-max |
+| 层      | 技术                                                    |
+| ------ | ----------------------------------------------------- |
+| 后端     | Spring Boot 2.2.5 / MyBatis 2.1.3 / MySQL 8 / Java 11 |
+| 前端     | Vue 2 / Element UI / Axios / Bootstrap                |
+| 部署     |  腾讯云 CVM / EdgeOne Pages CDN                          |
+| AI 工具链 | TRAE / Spec Kit / OpenSpec /  ui-ux-pro-max           |
 
 ## 功能模块
 
@@ -86,3 +86,4 @@ npm run serve
 - **后端重构**：Spec Kit 规格驱动，将 Hibernate→MyBatis 框架迁移拆解为 86 个任务，8 阶段全量完成
 - **前端重构**：OpenSpec 变更驱动，管理 UI 美化迭代；ui-ux-pro-max 负责页面优化
 - **质量保障**：gstack 自动化 QA（32 页面全量验证，健康评分 100/100）+ AI 代码审查 + 工程架构审查
+
