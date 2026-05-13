@@ -1,83 +1,89 @@
 # Farm Optimize — 农场综合管理系统
 
-基于 Spring Boot + Vue 2 的农场与餐厅综合管理系统，支持员工管理、考勤、销售、采购、预约点餐、报表导出等功能，涵盖 6 种角色权限。
+> 🌐 在线访问：<https://farm.xiaoziai.cn/>
+
+基于 Spring Boot + Vue 2 的前后端分离农场与餐厅综合管理系统，支持员工管理、考勤、销售、采购、预约点餐、报表导出等功能，涵盖 6 种角色权限。
+
+***
 
 ## 技术栈
 
-| 层      | 技术                                                    |
-| ------ | ----------------------------------------------------- |
-| 后端     | Spring Boot 2.2.5 / MyBatis 2.1.3 / MySQL 8 / Java 11 |
-| 前端     | Vue 2 / Element UI / Axios / Bootstrap                |
-| 部署     |  腾讯云 CVM / EdgeOne Pages CDN                          |
-| AI 工具链 | TRAE / Spec Kit / OpenSpec /  ui-ux-pro-max           |
+| 层        | 技术                | 版本           |
+| -------- | ----------------- | ------------ |
+| 后端框架     | Spring Boot       | 2.2.5        |
+| ORM      | MyBatis           | 2.1.3        |
+| 数据库      | MySQL             | 8.0          |
+| 运行时      | Java (OpenJDK)    | 11           |
+| 前端框架     | Vue.js            | 2.6          |
+| UI 组件库   | Element UI        | 2.13         |
+| CSS 框架   | Bootstrap         | 4.4          |
+| Excel 导出 | Apache POI + jxls | 3.15 / 1.0.6 |
 
-## 功能模块
+***
 
-- **超级管理员**：全局员工管理、考勤报表、销售/采购报表导出
-- **农场经理**：农场员工管理、考勤、销售/采购统计
-- **农场员工**：农产品管理、销售录入、肥料/原料管理
-- **餐厅经理**：餐厅员工管理、考勤、物料/维修管理
-- **餐厅员工**：桌台管理、点餐结算、维修上报
-- **顾客**：预约、点餐、修改密码
+## 系统架构
 
-## 项目结构
+```mermaid
+graph TD
+    Browser["🌐 用户浏览器<br/>farm.xiaoziai.cn"]
 
+    Browser -- "页面请求" --> CDN["EdgeOne Pages CDN<br/>Vue SPA 静态托管"]
+    Browser -- "API 请求 /api/*" --> EdgeFn["EdgeOne Edge Functions<br/>API 代理（同域无 CORS）"]
+
+    CDN -.->|返回静态资源| Browser
+    EdgeFn -- "fetch 后端 API" --> Nginx["腾讯云轻量应用服务器<br/>Nginx :443 (SSL)<br/>反向代理 + WAF"]
+    Nginx -- "proxy_pass localhost" --> Backend["Docker: farm-backend<br/>Spring Boot + MyBatis<br/>:8080"]
+    Backend -- "JDBC :3306" --> MySQL["Docker: farm-mysql<br/>MySQL 8.0<br/>farm 数据库"]
+
+    style Browser fill:#4FC3F7,color:#000
+    style CDN fill:#81C784,color:#000
+    style EdgeFn fill:#FFB74D,color:#000
+    style Nginx fill:#9575CD,color:#fff
+    style Backend fill:#E57373,color:#fff
+    style MySQL fill:#64B5F6,color:#000
 ```
-Farm_optimize/
-├── backend/                    # Spring Boot 后端
-│   ├── src/main/java/com/farm/
-│   │   ├── controller/         # 7 个 Controller（80+ API 端点）
-│   │   ├── service/            # 21 个 Service
-│   │   ├── repository/         # 18 个 MyBatis Mapper 接口
-│   │   ├── entity/             # 21 个 Entity + DTO
-│   │   ├── config/             # CORS / Web 配置
-│   │   ├── interceptor/        # 7 个角色拦截器
-│   │   └── component/          # Excel 导出 / 加密组件
-│   ├── src/main/resources/
-│   │   ├── mapper/             # 18 个 MyBatis Mapper XML
-│   │   └── application.properties
-│   └── pom.xml
-├── frontend/                   # Vue 2 前端
-│   ├── src/
-│   │   ├── views/              # 32 个页面视图
-│   │   ├── components/         # Navbar / AlertDialog
-│   │   ├── api/                # 7 个 API 模块
-│   │   └── router/             # Vue Router
-│   └── package.json
-├── 部署/                       # 部署配置
-│   ├── docker-compose.yml
-│   ├── nginx.conf
-│   └── schema.sql
-└── openspec/                   # OpenSpec 变更管理
-```
+
+***
 
 ## 快速开始
 
 ### 环境要求
 
-- Java 11+
-- Maven 3.6+
-- Node.js 12+
-- MySQL 8.0
+| 依赖      | 最低版本 | 说明                   |
+| ------- | ---- | -------------------- |
+| Java    | 11   | OpenJDK / Oracle JDK |
+| Maven   | 3.6  | 后端构建                 |
+| Node.js | 12   | 前端构建                 |
+| MySQL   | 8.0  | 数据库，字符集 utf8mb4      |
 
-### 后端启动
+### 1. 初始化数据库
+
+```bash
+mysql -u root -p < 部署/schema.sql
+```
+
+该脚本会创建 `farm` 数据库及全部 17 张表（`IF NOT EXISTS`，可安全重复执行）。
+
+### 2. 启动后端
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-后端默认运行在 `http://localhost:8080`，需确保 MySQL 在 `localhost:3306` 运行且存在 `farm` 数据库。
+后端默认运行在 `http://localhost:8080`。
 
-### 前端启动
+### 3. 启动前端
 
 ```bash
 cd frontend
 npm install --registry=https://registry.npmmirror.com
-npm run serve
+npm run dev
 ```
 
-前端默认运行在 `http://localhost:8081`，API 请求通过 vue.config.js 代理转发到后端。
+前端默认运行在 `http://localhost:8081`，API 请求代理到本地后端 `http://localhost:8080/`。
+
+***
 
 ## AI 驱动重构
 

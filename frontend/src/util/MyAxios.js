@@ -1,7 +1,7 @@
 import axios from "axios";
 import bus from "@/util/Bus";
 
-axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL || "/api";
+axios.defaults.baseURL = "/api";
 axios.defaults.withCredentials = true;
 axios.defaults.headers["Content-Type"] = "application/json;charset=UTF-8";
 

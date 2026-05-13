@@ -1,5 +1,7 @@
 package com.farm.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-// 报修报损表
 public class Repair {
 
     public static final String repairType1 = "报修";
@@ -20,6 +21,7 @@ public class Repair {
 
     private int id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertTime;
 
     private String repairType;

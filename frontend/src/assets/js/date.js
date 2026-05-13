@@ -1,4 +1,7 @@
 export function formatDate(date, fmt) {
+  if (!date || isNaN(date.getTime())) {
+    return "--";
+  }
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(
       RegExp.$1,

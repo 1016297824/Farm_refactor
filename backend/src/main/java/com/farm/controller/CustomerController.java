@@ -275,6 +275,7 @@ public class CustomerController {
         reserve.setDiningTable(diningTable);
         reserve.setStartTime(pageBody.getStartTime());
         reserve.setEndTime(pageBody.getEndTime());
+        reserve.setInsertTime(LocalDateTime.now());
         reserveService.save(reserve);
 
         LocalDateTime localDateTime = LocalDateTime.now().withHour(0);

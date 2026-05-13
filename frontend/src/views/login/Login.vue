@@ -28,7 +28,7 @@
                 />
               </svg>
             </div>
-            <h1 class="login-title">西塘草舍农场</h1>
+            <h1 class="login-title">农场</h1>
             <p class="login-subtitle">欢迎回到绿色家园</p>
             <div class="farm-divider"></div>
           </div>

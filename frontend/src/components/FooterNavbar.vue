@@ -22,10 +22,10 @@
             fill="#15803D"
           />
         </svg>
-        <span>西塘草舍农场</span>
+        <span>农场</span>
       </div>
       <div class="farm-footer-text">
-        2020 - 2026 西塘草舍农场 · 绿色农业 · 健康生活
+        2020 - 2026 农场 · 绿色农业 · 健康生活
       </div>
     </div>
   </footer>

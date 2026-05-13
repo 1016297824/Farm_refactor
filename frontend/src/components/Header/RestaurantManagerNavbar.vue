@@ -24,7 +24,7 @@
             />
           </svg>
         </div>
-        <span class="farm-navbar-title">西塘草舍农场</span>
+        <span class="farm-navbar-title">农场</span>
       </a>
 
       <nav class="farm-navbar-nav">

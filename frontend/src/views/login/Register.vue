@@ -29,7 +29,7 @@
               </svg>
             </div>
             <h1 class="register-title">创建账号</h1>
-            <p class="register-subtitle">加入西塘草舍农场大家庭</p>
+            <p class="register-subtitle">加入农场</p>
             <div class="farm-divider"></div>
           </div>
 

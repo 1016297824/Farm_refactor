@@ -1,1 +1,0 @@
-﻿{"version": "1.1", "rules": [{"pattern": "/api/*", "action": {"type": "rewrite", "destination": "http://服务器地址:39080/{path}"}, "headers": {"set": {"X-Real-IP": "{client_ip}", "X-Forwarded-For": "{client_ip}", "X-Forwarded-Proto": "https"}}}, {"pattern": "*", "action": {"type": "serve", "destination": "/index.html"}, "condition": {"not": {"file_exists": true}}}]}
